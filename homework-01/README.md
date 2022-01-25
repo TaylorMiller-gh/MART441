@@ -1,0 +1,7 @@
+## **Week 1** ##
+
+This assignment was a great way to jump back in to web design. I didn't get to explore as many techniques as I had hoped when I first thought of the page design, but it was a good start. I'm getting better at thinking of mobile design first rather than hard coding sizes and positions. This was an especially difficult task for me since I'm used to dealing with things in a more straight forward, fixed way instead of an 'abstract' and proportional way.
+
+Concerning the design of this page, I just wanted to get the basics of the assignment down first. I wanted to make sure the design would work well when I rescaled the window. The aesthetic was derived from wheeling through my stored photos. I like dark-ish/Halloween vibes, so I grabbed some earthy textures and went with an orange/yellow on gray. The background is a height map of dirt, and the bottom is a stripped png outline of spruce bark. It turned out to be pretty bland hahaha. I liked the idea of the background image (eg the dirt) scrolling through the outlines of other backgrounds (eg the spruce.) Maybe a few graphics or some sort of ominous animation would tie it together.
+
+I definitely still feel too cautious when approaching fonts. I'm not much of a typography guy, so I have a strong tendency to default to something that is going to be really reliable. The result (in my opinion) is a bit boring. I chose a Gothic style paired with serif - it's a safe bet, I guess. 
