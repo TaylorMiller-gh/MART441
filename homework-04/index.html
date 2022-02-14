@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="description" content="MART 441 - HW4">
+    <meta name="author" content="Taylor Miller">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Quanderous </title>
+
+    <style>
+      body {
+        font-family: Futura, "Trebuchet MS", Arial, sans-serif;
+        font-size: 24px;
+        font-style: normal;
+        color: #CED2D7;
+        background-color: #222222;
+        margin: auto;
+        width: 50%;
+        padding: 10px;
+      }
+      h1 {
+        font-family: Futura, "Trebuchet MS", Arial, sans-serif;
+        font-size: 24px;
+        font-style: italic;
+        color: red;
+      }
+    </style>
+
+    <script src="main.js"></script>
+  </head>
+  <body>
+    <img src="./images/start.png" id ="image" width="900" height="500">
+    <br>
+    <h1> An Unkindled Adventure </h1>
+      <div id="story">
+        You have risen, Unkindled One, to meet the first boss. Shouldn't be too difficult. What will you do?
+      </div>
+      <br>
+      <div id="prompt">
+        Type 'Dodge' or 'Attack'
+      </div>
+      <input type="text" size="30" id="choice" autofocus>
+      <button id="submit" onClick="choice();">Submit</button>
+
+  </body>
+</html>
