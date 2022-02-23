@@ -5,12 +5,11 @@ Working with fixed arrays can be challenging. My initial solution to this proble
 
 Arrays have been difficult for me. I am to understand the solution I came up with is deplorable (and so is splicing) and should be avoided because of the way it handles the data. I decided to leave both of the failed attempts here. Why didn't they work?
 
--------------------------------------------------------------------------------
-/*  while(imagesRandom.length < 10){
 
-    //Select a random index
+---
+    while(imagesRandom.length < 10){
+      //Select a random index
     var i = Math.floor(Math.random()*images.length);
-
     //If the index selected is null/undefined, 'splice' in images[k]. Increment k.
     if(imagesRandom[i] == null) {
       //At index i, delete 0 items, insert images[k]
@@ -18,15 +17,15 @@ Arrays have been difficult for me. I am to understand the solution I came up wit
       k++;
     }
     console.log(imagesRandom.join());
-  }
-  */
-----------------------------------------------------------------------------
+    }
 
-  /* (ImagesRandom[] has been instantiated with 10 positions)
+---
 
-  for(var j = 0; j <= imagesRandom.length; j++){
-    //Select a random index
-    var i = Math.floor(Math.random()*images.length);
+    /* (ImagesRandom[] has been instantiated with 10 positions)
+
+    for(var j = 0; j <= imagesRandom.length; j++){
+      //Select a random index
+      var i = Math.floor(Math.random()*images.length);
 
     //If the index selected is still null/undefined, delete null value and 'splice' in images[k]. Increment k. Otherwise, run again.
     if(imagesRandom[i] == undefined) {
@@ -38,4 +37,4 @@ Arrays have been difficult for me. I am to understand the solution I came up wit
       j--;
     }
     console.log(imagesRandom.join());
-  }*/
+    }
