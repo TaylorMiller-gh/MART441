@@ -21,7 +21,7 @@ function setArray () {
 
   var viewer1 = new viewer('Thich Nhat Hanh', './images/hanh.jpg', 'Unknown', 'Thich Nhat Hanh is the founder of Engaged Buddhism, or socially engaged Buddhism, and has worked on social justice internationally since the 1940s.', '2015');
   info.push(viewer1);
-  var viewer2 = new viewer('Marina Abramović', './images/marina.JPG', 'Museum of Modern Art', 'Performance artist Marina Abramović has confronted cultural issues and social identity for over forty years with performative art.', '2010');
+  var viewer2 = new viewer('Marina Abramović', './images/marina.jpg', 'Museum of Modern Art', 'Performance artist Marina Abramović has confronted cultural issues and social identity for over forty years with performative art.', '2010');
   info.push(viewer2);
   var viewer3 = new viewer('Napalm Death', './images/death.jpg', 'Kevin Estrada', 'Founders of Grindcore, Napalm Death roar messages of humanism and equal rights through a shocking, visceral form of music.', '2020');
   info.push(viewer3);
