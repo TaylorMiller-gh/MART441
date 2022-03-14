@@ -1,0 +1,38 @@
+body {
+  font-family: Futura, "Trebuchet MS", Arial, sans-serif;
+  font-size: 24px;
+  font-style: normal;
+  color: #CED9D8;
+  background-color: #222222;
+  margin: auto;
+  width: 75%;
+  padding: 10px;
+}
+
+h1 {
+  font-family: Futura, "Trebuchet MS", Arial, sans-serif;
+  font-size: 24px;
+  font-style: italic;
+  color: #ADD8E6;
+}
+
+div {
+  font-size: 18px;
+  font-style: normal;
+  color: #CED9D8;
+}
+
+img {
+  margin: auto;
+  width: 60%;
+  height: 50%;
+}
+
+#squareOfMotion {
+   width: 100px;
+   height: 100px;
+   background: blue;
+   position: absolute;
+   left: 40;
+   top: 600;
+ }
