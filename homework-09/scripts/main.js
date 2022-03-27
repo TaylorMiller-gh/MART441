@@ -18,6 +18,7 @@ img.onload = () => {
 
 
 
+/* Mixing content error: Cannot access HTTP from HTTPS -> Must allow Insecure Content on this specific site to see function.*/
 
 $(document).ready(function () {
     $("#coord").click(function () {
@@ -26,8 +27,8 @@ $(document).ready(function () {
         console.log(info);
         long = info.iss_position.longitude;
         lat = info.iss_position.latitude;
-        //console.log(string1);
-        //console.log(string2);
+        //console.log(lat);
+        //console.log(long);
         $("#information").html("Longitude: " + long + " Latitude: " + lat);
 
         //The Canvas pixels are double the number of lat-long lines (eg 720x360 vs. 360x180); posX = 360 is 0 degress long. posY = 90 is 0 degrees lat.
