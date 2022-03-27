@@ -1,0 +1,25 @@
+body {
+  font-family: Futura, "Trebuchet MS", Arial, sans-serif;
+  font-size: 24px;
+  font-style: normal;
+  color: #CED9D8;
+  background-color: #222222;
+
+}
+
+#title {
+  font-family: Futura, "Trebuchet MS", Arial, sans-serif;
+  font-size: 24px;
+  font-style: italic;
+  color: #ADD8E6;
+}
+
+div {
+  font-size: 18px;
+  font-style: normal;
+  color: #CED9D8;
+}
+
+.content {
+  margin-top: 10px;
+}
