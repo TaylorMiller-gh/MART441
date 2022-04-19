@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="description" content="MART 441 - HW14">
+    <meta name="author" content="Taylor Miller">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Homework 14 </title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/3.60.0-beta.5/phaser.js"></script>
+  </head>
+  <body>
+    <script type="text/javascript">
+
+      var config = {
+      type: Phaser.AUTO,
+      width: 800,
+      height: 600,
+      physics: {
+          default: 'arcade',
+          arcade: {
+              gravity: { y: 300 },
+              debug: false
+          }
+      },
+      scene: {
+          preload: preload,
+          create: create,
+          update: update
+      }
+  };
+
+  var player;
+  var pizzas;
+  var skulls;
+  var platforms;
+  var cursors;
+  var score = 0;
+  var gameOver = false;
+  var scoreText;
+
+  var game = new Phaser.Game(config);
+
+  function preload ()
+  {
+      this.load.image('sky', 'assets/sky.png');
+      this.load.image('ground', 'assets/platform.png');
+      this.load.image('pizza', 'assets/pizza.png');
+      this.load.image('skull', 'assets/skull.png');
+      // Raphael, the legend
+      this.load.spritesheet('raph', 'assets/raph.png', { frameWidth: 48, frameHeight: 48 });
+  }
+
+  function create ()
+  {
+      this.add.image(400, 300, 'sky');
+
+      platforms = this.physics.add.staticGroup();
+
+      platforms.create(400, 568, 'ground').setScale(2).refreshBody();
+
+      // Couple extra platforms
+      platforms.create(600, 400, 'ground');
+      platforms.create(50, 250, 'ground');
+      platforms.create(750, 220, 'ground');
+      platforms.create(200, 125, 'ground');
+      platforms.create(100, 400, 'ground');
+
+      player = this.physics.add.sprite(100, 450, 'raph');
+
+      player.setBounce(0.2);
+      player.setCollideWorldBounds(true);
+
+      this.anims.create({
+          key: 'left',
+          frames: this.anims.generateFrameNumbers('raph', { start: 0, end: 9 }),
+          frameRate: 10,
+          repeat: -1
+      });
+
+      this.anims.create({
+          key: 'turn',
+          frames: [ { key: 'raph', frame: 10 } ],
+          frameRate: 20
+      });
+
+      this.anims.create({
+          key: 'right',
+          frames: this.anims.generateFrameNumbers('raph', { start: 10, end: 19 }),
+          frameRate: 10,
+          repeat: -1
+      });
+
+      cursors = this.input.keyboard.createCursorKeys();
+
+      pizzas = this.physics.add.group({
+          key: 'pizza',
+          repeat: 11,
+          setXY: { x: 12, y: 0, stepX: 70 }
+      });
+
+      pizzas.children.iterate(function (child) {
+          //  Send pizza everywhere
+          child.setBounce(Phaser.Math.FloatBetween(0.4, 1));
+          child.setCollideWorldBounds(true);
+          child.setVelocity(Phaser.Math.Between(-200, 200), 20);
+          child.allowGravity = false;
+      });
+
+      skulls = this.physics.add.group();
+
+
+      scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
+
+      this.physics.add.collider(player, platforms);
+      this.physics.add.collider(pizzas, platforms);
+      this.physics.add.collider(skulls, platforms);
+
+      this.physics.add.overlap(player, pizzas, collectPizza, null, this);
+
+      this.physics.add.collider(player, skulls, hitSkull, null, this);
+
+  }
+
+  function update ()
+  {
+      if (gameOver)
+      {
+          return;
+      }
+
+      if (cursors.left.isDown)
+      {
+          player.setVelocityX(-160);
+
+          player.anims.play('left', true);
+      }
+      else if (cursors.right.isDown)
+      {
+          player.setVelocityX(160);
+
+          player.anims.play('right', true);
+      }
+      else
+      {
+          player.setVelocityX(0);
+
+          player.anims.play('turn');
+      }
+      // Jump with spacebar
+      if (cursors.space.isDown && player.body.touching.down)
+      {
+          player.setVelocityY(-330);
+      }
+  }
+
+  function collectPizza (player, pizza)
+  {
+      pizza.disableBody(true, true);
+
+      score += 10;
+      scoreText.setText('Score: ' + score);
+
+      if (pizzas.countActive(true) === 0)
+      {
+          pizzas.children.iterate(function (child) {
+
+              child.enableBody(true, child.x, 0, true, true);
+              // Give pizza new velocity
+              child.setVelocity(Phaser.Math.Between(-200, 200), 20);
+
+          });
+
+          var x = (player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
+
+          var skull = skulls.create(x, 16, 'skull');
+          skull.setBounce(1);
+          skull.setCollideWorldBounds(true);
+          skull.setVelocity(Phaser.Math.Between(-200, 200), 20);
+          skull.allowGravity = false;
+
+      }
+  }
+
+  function hitSkull (player, skull)
+  {
+      this.physics.pause();
+
+      player.setTint(0xff0000);
+
+      player.anims.play('turn');
+
+      gameOver = true;
+  }
+
+</script>
+
+  </body>
+</html>
