@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="description" content="MART 441 - HW14">
+    <meta name="author" content="Taylor Miller">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Homework 14 </title>
+        <style>
+            body { margin: 0; }
+            canvas { display: block; }
+        </style>
+    </head>
+    <body>
+      <script src="js/three.min.js"></script>
+      <script src="js/OBJLoader.js"></script>
+      <script src="js/TrackballControls.js"></script>
+        <script>
+
+          function getScene() {
+            var scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x444444);
+            return scene;
+          }
+
+          function getCamera() {
+            var aspectRatio = window.innerWidth / window.innerHeight;
+            var camera = new THREE.PerspectiveCamera(75, aspectRatio, 0.1, 1000);
+            camera.position.set(0, 60, -10);
+            return camera;
+          }
+
+          function getLight(scene) {
+            var light = new THREE.PointLight(0xffffff, 1, 0);
+            light.position.set(20, 50, 20);
+            scene.add(light);
+
+            var ambientLight = new THREE.AmbientLight(0x111111);
+            scene.add(ambientLight);
+            return light;
+          }
+
+          function getRenderer() {
+            var renderer = new THREE.WebGLRenderer({antialias: true});
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.body.appendChild(renderer.domElement);
+            return renderer;
+          }
+
+          function getControls(camera, renderer) {
+            var controls = new THREE.TrackballControls(camera, renderer.domElement);
+            controls.zoomSpeed = 0.4;
+            controls.panSpeed = 0.4;
+            return controls;
+          }
+
+          function loadModel() {
+            //Tried to get a material onto the obj - didn't work. Code from https://stackoverflow.com/questions/16200082/assigning-materials-to-an-objloader-model-in-three-js
+            var matOBJ = new THREE.MeshBasicMaterial( { color: 0x0000ff } );
+            var loader = new THREE.OBJLoader();
+            loader.load( 'assets/bmw_M5.obj',
+                function( obj ){
+                  obj.traverse( function( child ) {
+                    if ( child instanceof THREE.Mesh ) {
+                      child.material = matOBJ;
+                    }
+                  } );
+              scene.add( obj );
+            } );
+          }
+
+          function render() {
+            requestAnimationFrame(render);
+            animate();
+            renderer.render(scene, camera);
+            controls.update();
+          };
+
+          var scene = getScene();
+          var camera = getCamera();
+          var light = getLight(scene);
+          var renderer = getRenderer();
+          var controls = getControls(camera, renderer);
+
+          var geoCube1 = new THREE.BoxGeometry();
+          var matCube1 = new THREE.MeshBasicMaterial({color: 0x00ff00});
+          var cube1 = new THREE.Mesh(geoCube1, matCube1);
+
+          var geoCube2 = new THREE.BoxGeometry();
+          var matCube2 = new THREE.MeshBasicMaterial({color: 0xffff00});
+          var cube2 = new THREE.Mesh(geoCube2, matCube2);
+
+          scene.add(cube1);
+          scene.add(cube2);
+
+          function animate() {
+              cube1.rotation.x += 0.01;
+              cube1.rotation.y += 0.01;
+              cube2.rotation.x -= 0.01;
+              cube2.rotation.y -= 0.01;
+          }
+
+          loadModel();
+
+          render();
+
+        </script>
+    </body>
+</html>
