@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="description" content="MART 441 - HW15">
+    <meta name="author" content="Taylor Miller">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Homework 15 </title>
+    <script>
+         function refreshPage()
+         {
+            const params = new URLSearchParams(window.location.search)
+            var input = params.get("input");
+            var refresh = params.has("norefresh");
+            if(!refresh)
+            {
+               window.location = "page0.html?input=" + input + "&norefresh=1";
+            }
+
+         }
+      </script>
+    </head>
+    <body onload="refreshPage();">
+      <h1> You typed... </h1>
+      <span id="span">...</span>
+
+    </body>
+</html>

@@ -1,0 +1,4 @@
+## **Week 15** ##
+
+Node.js is an important tool to the modern web browsing experience. Node allows developers to move past the send-receive protocols of previous developments and begin working with real-time applications. This persistence has allowed for things like updated news feeds and chat rooms. While Node can be rough on the CPU, it has allowed for expanded applications around streaming and Input/Output based operations.
+My experience with Node has been fairly unsuccessful haha. I haven't had much exposure to much programming around servers, so I'm still fairly confused as to why my pages haven't worked. I discovered the problem was initially in the node-html-parser, but after coordinating that (or attempting to) I still couldn't get the program to function. I am stuck at 'VM48:1460 crbug/1173575, non-JS module files deprecated.' 
