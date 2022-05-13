@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="description" content="MART 441 - HW14">
+    <meta name="author" content="Taylor Miller">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Homework 14 </title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/3.60.0-beta.5/phaser.js"></script>
+    <style>
+      body {background-color: black;}
+    </style>
+  </head>
+  <body>
+    <script type="text/javascript">
+
+      var config = {
+      type: Phaser.AUTO,
+      width: 800,
+      height: 600,
+      physics: {
+          default: 'arcade',
+          arcade: {
+              gravity: { y: 300 },
+              debug: false
+          }
+      },
+      scene: {
+          preload: preload,
+          create: create,
+          update: update
+      }
+  };
+
+  var player;
+  var pizzas;
+  var skulls;
+  var platforms;
+  var cursors;
+  var score = 0;
+  var gameOver = false;
+  var scoreText;
+
+  //Track if the player is attacking
+  var isAttacking = 0;
+
+  var game = new Phaser.Game(config);
+
+  function preload ()
+  {
+      this.load.image('sky', 'assets/sky.png');
+      this.load.image('ground', 'assets/platform.png');
+      this.load.image('pizza', 'assets/pizza.png');
+      this.load.image('skull', 'assets/skull.png');
+      // Raphael, the legend
+      this.load.spritesheet('raph', 'assets/raph.png', { frameWidth: 48, frameHeight: 48 });
+      this.load.spritesheet('attack', 'assets/attack.png', { frameWidth: 48, frameHeight: 48 });
+  }
+
+  function create ()
+  {
+      this.add.image(400, 300, 'sky');
+
+
+
+//---------------------Static platforms-----------------------------------
+      platforms = this.physics.add.staticGroup();
+      //The actual ground
+      platforms.create(400, 568, 'ground').setScale(2).refreshBody();
+      //Platform at top of screen
+      platforms.create(200, 125, 'ground');
+
+
+
+
+//------------- Two 'bottom' moving platforms ---------------
+      var bottomPlat = this.physics.add.image(50, 400, 'ground')
+        .setImmovable(true)
+        .setVelocity(100, -100);
+      bottomPlat.body.setAllowGravity(false);
+
+      var bottomPlat1 = this.physics.add.image(550, 400, 'ground')
+        .setImmovable(true)
+        .setVelocity(100, -100);
+      bottomPlat1.body.setAllowGravity(false);
+
+
+
+//---------------Mid level moving platform-------------------------------
+      var midPlat = this.physics.add.image(500, 250, 'ground')
+        .setImmovable(true)
+        .setVelocity(100, -100);
+      midPlat.body.setAllowGravity(false);
+
+
+
+//---------------------Move Bottom -----------------------------------
+      this.tweens.timeline({
+        targets: bottomPlat.body.velocity,
+        loop: -1,
+        tweens: [
+          { x:    150, y: 0, duration: 1200, ease: 'Stepped' },
+          { x:    -150, y: 0, duration: 1200, ease: 'Stepped' },
+        ]
+      });
+
+      //bottom right
+      this.tweens.timeline({
+        targets: bottomPlat1.body.velocity,
+        loop: -1,
+        tweens: [
+          { x:    150, y: 0, duration: 1200, ease: 'Stepped' },
+          { x:    -150, y: 0, duration: 1200, ease: 'Stepped' },
+        ]
+      });
+
+
+//------------------------Move mid level---------------------------------------
+      this.tweens.timeline({
+        targets: midPlat.body.velocity,
+        loop: -1,
+        tweens: [
+          { x:    -100, y: 0, duration: 1200, ease: 'Stepped' },
+          { x:    100, y: 0, duration: 1200, ease: 'Stepped' },
+        ]
+      });
+
+      //PLayer Physics
+      player = this.physics.add.sprite(100, 450, 'raph');
+      player.setBounce(0.2);
+      player.setCollideWorldBounds(true);
+
+
+
+//-------------------- Animations ---------------------------------------
+      this.anims.create({
+          key: 'left',
+          frames: this.anims.generateFrameNumbers('raph', { start: 0, end: 9 }),
+          frameRate: 10,
+          repeat: -1
+      });
+
+      this.anims.create({
+          key: 'turn',
+          frames: [ { key: 'raph', frame: 10 } ],
+          frameRate: 20
+      });
+
+      this.anims.create({
+          key: 'right',
+          frames: this.anims.generateFrameNumbers('raph', { start: 10, end: 19 }),
+          frameRate: 10,
+          repeat: -1
+      });
+
+      this.anims.create({
+          key: 'attackL',
+          frames: this.anims.generateFrameNumbers('attack', { frames: [ 0, 1, 2, 3 ,4, 5, ] }),
+          frameRate: 6,
+          repeat: -1
+      });
+
+      this.anims.create({
+          key: 'attackR',
+          frames: this.anims.generateFrameNumbers('attack', { start: 6, end: 11 }),
+          frameRate: 6,
+          repeat: -1
+      });
+
+      cursors = this.input.keyboard.createCursorKeys();
+
+      pizzas = this.physics.add.group({
+          key: 'pizza',
+          repeat: 11,
+          setXY: { x: 12, y: 0, stepX: 70 }
+      });
+
+      pizzas.children.iterate(function (child) {
+          //  Send pizza everywhere
+          child.setBounce(Phaser.Math.FloatBetween(0.4, 1));
+          child.setCollideWorldBounds(true);
+          child.setVelocity(Phaser.Math.Between(-200, 200), 20);
+          child.allowGravity = false;
+      });
+
+      skulls = this.physics.add.group();
+
+      scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#FFF' });
+
+//-----------------------Colliders---------------------------------------
+      //player
+      this.physics.add.collider(player, platforms);
+      this.physics.add.collider(player, bottomPlat);
+      this.physics.add.collider(player, bottomPlat1);
+      this.physics.add.collider(player, midPlat);
+      //collectibles
+      this.physics.add.collider(pizzas, platforms);
+      this.physics.add.collider(pizzas, bottomPlat);
+      this.physics.add.collider(pizzas, bottomPlat1);
+      this.physics.add.collider(pizzas, midPlat);
+      //enemy
+      this.physics.add.collider(skulls, platforms);
+      this.physics.add.collider(skulls, bottomPlat);
+      this.physics.add.collider(skulls, bottomPlat1);
+      this.physics.add.collider(skulls, midPlat);
+
+
+// -------------------Functions-------------------------------------
+      this.physics.add.overlap(player, pizzas, collectPizza, null, this);
+
+      this.physics.add.collider(player, skulls, hitSkull, null, this);
+
+  }
+
+  function update ()
+  {
+      if (gameOver)
+      {
+          return;
+      }
+// --------------- Input & Movement-------------------------------
+      if (cursors.left.isDown)
+      {
+          player.setVelocityX(-160);
+          player.anims.play('left', true);
+          isAttacking = 0;
+      }
+      else if (cursors.right.isDown)
+      {
+          player.setVelocityX(160);
+          player.anims.play('right', true);
+          isAttacking = 0;
+      }
+      else if (cursors.down.isDown)
+      {
+          player.anims.play('attackR', true);
+          isAttacking = 1;
+      }
+      else
+      {
+          player.setVelocityX(0);
+          player.anims.play('turn');
+          isAttacking = 0;
+      }
+      // Jump with up
+      if (cursors.up.isDown && player.body.touching.down)
+      {
+          player.setVelocityY(-330);
+          isAttacking = 0;
+      }
+  }
+
+
+  function collectPizza (player, pizza)
+  {
+      pizza.disableBody(true, true);
+
+      score += 10;
+      scoreText.setText('Score: ' + score);
+
+      if (pizzas.countActive(true) === 0)
+      {
+          pizzas.children.iterate(function (child) {
+
+              child.enableBody(true, child.x, 0, true, true);
+              // Give pizza new velocity
+              child.setVelocity(Phaser.Math.Between(-200, 200), 20);
+
+          });
+
+          var x = (player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
+
+          var skull = skulls.create(x, 16, 'skull');
+          skull.setBounce(1);
+          skull.setCollideWorldBounds(true);
+          skull.setVelocity(Phaser.Math.Between(-200, 200), 20);
+          skull.allowGravity = false;
+
+      }
+  }
+
+
+  function hitSkull (player, skull)
+  {
+    //If the player is not attacking, they are killed
+    if (isAttacking==0) {
+
+      this.physics.pause();
+      player.setTint(0xff0000);
+      player.anims.play('turn');
+      gameOver = true;
+    }
+    //if they player is attacking, the bomb is destroyed
+    else if (isAttacking==1)
+    {
+      skull.disableBody(true, true);
+    }
+  }
+
+</script>
+
+  </body>
+</html>
